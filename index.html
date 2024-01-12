@@ -31,20 +31,19 @@
       requestMonitor.appendChild(logEntry);
     }
 
-    // Interceptar las solicitudes de red
-    const originalFetch = window.fetch;
-    window.fetch = function () {
-      const request = arguments[1];
-      logRequest({ method: arguments[0], url: request.url });
-      return originalFetch.apply(this, arguments);
-    };
+    function interceptRequests() {
+      const originalOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function () {
+        logRequest({ method: arguments[0], url: arguments[1] });
+        return originalOpen.apply(this, arguments);
+      };
+    }
 
-    // También puedes interceptar solicitudes AJAX utilizando XMLHttpRequest
-    const originalOpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function () {
-      logRequest({ method: arguments[0], url: arguments[1] });
-      return originalOpen.apply(this, arguments);
-    };
+    // Interceptar las solicitudes de red cada 30 segundos
+    setInterval(interceptRequests, 5000);
+
+    // También puedes iniciar la interceptación de inmediato
+    interceptRequests();
   </script>
 
 </body>
