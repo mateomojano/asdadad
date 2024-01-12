@@ -21,14 +21,15 @@
 <body>
 
   <h1>Monitor de Peticiones</h1>
-  <div id="request-monitor"></div>
+  <div id="request-monitor">0</div>
 
   <script>
+    let requestCount = 0;
+
     function logRequest(request) {
       const requestMonitor = document.getElementById('request-monitor');
-      const logEntry = document.createElement('div');
-      logEntry.textContent = `${new Date().toLocaleTimeString()} - ${request.method} ${request.url}`;
-      requestMonitor.appendChild(logEntry);
+      requestCount++;
+      requestMonitor.textContent = requestCount;
     }
 
     function interceptRequests() {
@@ -39,10 +40,7 @@
       };
     }
 
-    // Interceptar las solicitudes de red cada 30 segundos
-    setInterval(interceptRequests, 5000);
-
-    // También puedes iniciar la interceptación de inmediato
+    // Interceptar las solicitudes de red cada vez que se realiza una
     interceptRequests();
   </script>
 
