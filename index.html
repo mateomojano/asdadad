@@ -34,17 +34,15 @@
     // Interceptar las solicitudes de red
     const originalFetch = window.fetch;
     window.fetch = function () {
-      const request = arguments[0];
-      logRequest(request);
+      const request = arguments[1];
+      logRequest({ method: arguments[0], url: request.url });
       return originalFetch.apply(this, arguments);
     };
 
     // También puedes interceptar solicitudes AJAX utilizando XMLHttpRequest
     const originalOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function () {
-      const method = arguments[0];
-      const url = arguments[1];
-      logRequest({ method, url });
+      logRequest({ method: arguments[0], url: arguments[1] });
       return originalOpen.apply(this, arguments);
     };
   </script>
